@@ -1,8 +1,4 @@
 # Phase Transition Probability (PoS) Calculator
-
-> **Portfolio Project** · Lucy · 2024–2025  
-> Empirical success-rate benchmarks for clinical trials, built from 480,000+ AACT records
-
 ---
 
 ## What this project does
@@ -78,11 +74,6 @@ python -m http.server 8000
 # → go to http://localhost:8000
 ```
 
-> **The dashboard works without running the Python scripts.**
-> It contains embedded placeholder data based on published benchmarks
-> (MIT Lo Lab 2019, BioMedTracker 2024 industry averages).
-> Run the Python scripts to replace it with your own AACT-derived estimates.
-
 ---
 
 ## Manual AACT download (if 00_setup.py fails)
@@ -122,18 +113,6 @@ Output: adjusted PoS + 95% confidence interval + percentile vs all trials.
 
 ---
 
-## Key findings (from placeholder benchmarks)
-
-| Phase | Industry PoS | 95% CI |
-|-------|-------------|--------|
-| Phase 1 | 66.5% | 66.0 – 67.1% |
-| Phase 2 | 56.4% | 55.9 – 56.9% |
-| Phase 3 | 70.2% | 69.4 – 71.0% |
-
-**Oncology** has the lowest Phase 2 PoS (~50%), consistent with published literature.  
-**RCT design** adds ~6 percentage points vs single-arm studies.  
-**Rare Disease** outperforms the average by ~5 pp — likely due to smaller, more targeted populations.
-
 ---
 
 ## How to use this in an rNPV model
@@ -152,12 +131,3 @@ Impact:
   → adds ~$40M to the risk-adjusted valuation
 ```
 
----
-
-## Skills demonstrated
-
-- **Statistical analysis**: Wilson CIs, chi-square tests, logistic regression with `statsmodels`
-- **Data engineering**: AACT flat file processing, MeSH term classification, feature engineering
-- **Domain knowledge**: Clinical development stages, PoS, rNPV framework
-- **Visualisation**: Interactive D3.js dashboard with live calculator
-- **Reproducibility**: Fully scripted pipeline from raw data to output
