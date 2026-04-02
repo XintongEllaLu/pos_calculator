@@ -1,0 +1,737 @@
+{
+  "summary": {
+    "total_trials": 99308,
+    "success_rate": 86.7,
+    "n_areas": 9,
+    "n_modalities": 3,
+    "date_range": "2005-2025",
+    "model_auc": 0.755
+  },
+  "benchmark_bars": [
+    {
+      "phase": "Phase 1",
+      "n": 31513,
+      "n_success": 28596,
+      "group": "Overall",
+      "pos_pct": 90.7,
+      "ci_lo": 90.4,
+      "ci_hi": 91.1,
+      "reliable": true
+    },
+    {
+      "phase": "Phase 1/2",
+      "n": 7789,
+      "n_success": 6328,
+      "group": "Overall",
+      "pos_pct": 81.2,
+      "ci_lo": 80.4,
+      "ci_hi": 82.1,
+      "reliable": true
+    },
+    {
+      "phase": "Phase 2",
+      "n": 33059,
+      "n_success": 27439,
+      "group": "Overall",
+      "pos_pct": 83.0,
+      "ci_lo": 82.6,
+      "ci_hi": 83.4,
+      "reliable": true
+    },
+    {
+      "phase": "Phase 2/3",
+      "n": 3755,
+      "n_success": 3262,
+      "group": "Overall",
+      "pos_pct": 86.9,
+      "ci_lo": 85.8,
+      "ci_hi": 87.9,
+      "reliable": true
+    },
+    {
+      "phase": "Phase 3",
+      "n": 23192,
+      "n_success": 20475,
+      "group": "Overall",
+      "pos_pct": 88.3,
+      "ci_lo": 87.9,
+      "ci_hi": 88.7,
+      "reliable": true
+    }
+  ],
+  "heatmap": [
+    {
+      "phase_clean": "Phase 1",
+      "area": "CNS",
+      "n": 2555,
+      "pos": 92.4
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Cardiovascular",
+      "n": 1065,
+      "pos": 91.7
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Immunology",
+      "n": 1218,
+      "pos": 91.1
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Infectious Disease",
+      "n": 2755,
+      "pos": 93.9
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Metabolic",
+      "n": 2123,
+      "pos": 95.1
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Oncology",
+      "n": 7010,
+      "pos": 79.5
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Other",
+      "n": 14023,
+      "pos": 94.5
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Rare Disease",
+      "n": 265,
+      "pos": 91.3
+    },
+    {
+      "phase_clean": "Phase 1",
+      "area": "Respiratory",
+      "n": 499,
+      "pos": 95.2
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "CNS",
+      "n": 812,
+      "pos": 91.0
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Cardiovascular",
+      "n": 348,
+      "pos": 88.2
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Immunology",
+      "n": 304,
+      "pos": 81.6
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Infectious Disease",
+      "n": 681,
+      "pos": 91.3
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Metabolic",
+      "n": 377,
+      "pos": 89.4
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Oncology",
+      "n": 3062,
+      "pos": 72.1
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Other",
+      "n": 1919,
+      "pos": 84.8
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Rare Disease",
+      "n": 158,
+      "pos": 78.5
+    },
+    {
+      "phase_clean": "Phase 1/2",
+      "area": "Respiratory",
+      "n": 128,
+      "pos": 89.8
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "CNS",
+      "n": 3977,
+      "pos": 87.4
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Cardiovascular",
+      "n": 1780,
+      "pos": 86.2
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Immunology",
+      "n": 2091,
+      "pos": 85.0
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Infectious Disease",
+      "n": 3017,
+      "pos": 88.0
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Metabolic",
+      "n": 1934,
+      "pos": 89.5
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Oncology",
+      "n": 11106,
+      "pos": 76.1
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Other",
+      "n": 8082,
+      "pos": 85.6
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Rare Disease",
+      "n": 381,
+      "pos": 81.1
+    },
+    {
+      "phase_clean": "Phase 2",
+      "area": "Respiratory",
+      "n": 691,
+      "pos": 84.1
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "CNS",
+      "n": 605,
+      "pos": 86.8
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Cardiovascular",
+      "n": 298,
+      "pos": 85.2
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Immunology",
+      "n": 152,
+      "pos": 84.2
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Infectious Disease",
+      "n": 441,
+      "pos": 84.4
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Metabolic",
+      "n": 290,
+      "pos": 92.8
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Oncology",
+      "n": 413,
+      "pos": 78.7
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Other",
+      "n": 1415,
+      "pos": 90.2
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Rare Disease",
+      "n": 66,
+      "pos": 78.8
+    },
+    {
+      "phase_clean": "Phase 2/3",
+      "area": "Respiratory",
+      "n": 75,
+      "pos": 81.3
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "CNS",
+      "n": 3183,
+      "pos": 86.4
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Cardiovascular",
+      "n": 1950,
+      "pos": 86.4
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Immunology",
+      "n": 1839,
+      "pos": 90.3
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Infectious Disease",
+      "n": 2830,
+      "pos": 90.4
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Metabolic",
+      "n": 2222,
+      "pos": 91.2
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Oncology",
+      "n": 3193,
+      "pos": 82.0
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Other",
+      "n": 7058,
+      "pos": 90.5
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Rare Disease",
+      "n": 302,
+      "pos": 78.1
+    },
+    {
+      "phase_clean": "Phase 3",
+      "area": "Respiratory",
+      "n": 615,
+      "pos": 90.4
+    }
+  ],
+  "factor_data": [
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "CNS",
+      "n": 2555,
+      "pos": 92.4
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Cardiovascular",
+      "n": 1065,
+      "pos": 91.7
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Immunology",
+      "n": 1218,
+      "pos": 91.1
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Infectious Disease",
+      "n": 2755,
+      "pos": 93.9
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Metabolic",
+      "n": 2123,
+      "pos": 95.1
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Oncology",
+      "n": 7010,
+      "pos": 79.5
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Other",
+      "n": 14023,
+      "pos": 94.5
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Rare Disease",
+      "n": 265,
+      "pos": 91.3
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "area",
+      "level": "Respiratory",
+      "n": 499,
+      "pos": 95.2
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "modality",
+      "level": "Biologic",
+      "n": 3922,
+      "pos": 88.8
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "modality",
+      "level": "Other",
+      "n": 1971,
+      "pos": 91.3
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "modality",
+      "level": "Small Molecule",
+      "n": 25620,
+      "pos": 91.0
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "is_rct",
+      "level": "0",
+      "n": 10551,
+      "pos": 86.7
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "is_rct",
+      "level": "1",
+      "n": 20962,
+      "pos": 92.8
+    },
+    {
+      "phase": "Phase 1",
+      "factor": "is_industry",
+      "level": "0",
+      "n": 31513,
+      "pos": 90.7
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "CNS",
+      "n": 3977,
+      "pos": 87.4
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Cardiovascular",
+      "n": 1780,
+      "pos": 86.2
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Immunology",
+      "n": 2091,
+      "pos": 85.0
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Infectious Disease",
+      "n": 3017,
+      "pos": 88.0
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Metabolic",
+      "n": 1934,
+      "pos": 89.5
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Oncology",
+      "n": 11106,
+      "pos": 76.1
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Other",
+      "n": 8082,
+      "pos": 85.6
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Rare Disease",
+      "n": 381,
+      "pos": 81.1
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "area",
+      "level": "Respiratory",
+      "n": 691,
+      "pos": 84.1
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "modality",
+      "level": "Biologic",
+      "n": 3757,
+      "pos": 83.5
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "modality",
+      "level": "Other",
+      "n": 3024,
+      "pos": 89.6
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "modality",
+      "level": "Small Molecule",
+      "n": 26278,
+      "pos": 82.2
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "is_rct",
+      "level": "0",
+      "n": 11456,
+      "pos": 78.4
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "is_rct",
+      "level": "1",
+      "n": 21603,
+      "pos": 85.4
+    },
+    {
+      "phase": "Phase 2",
+      "factor": "is_industry",
+      "level": "0",
+      "n": 33059,
+      "pos": 83.0
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "CNS",
+      "n": 3183,
+      "pos": 86.4
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Cardiovascular",
+      "n": 1950,
+      "pos": 86.4
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Immunology",
+      "n": 1839,
+      "pos": 90.3
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Infectious Disease",
+      "n": 2830,
+      "pos": 90.4
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Metabolic",
+      "n": 2222,
+      "pos": 91.2
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Oncology",
+      "n": 3193,
+      "pos": 82.0
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Other",
+      "n": 7058,
+      "pos": 90.5
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Rare Disease",
+      "n": 302,
+      "pos": 78.1
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "area",
+      "level": "Respiratory",
+      "n": 615,
+      "pos": 90.4
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "modality",
+      "level": "Biologic",
+      "n": 2734,
+      "pos": 92.1
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "modality",
+      "level": "Other",
+      "n": 2570,
+      "pos": 89.9
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "modality",
+      "level": "Small Molecule",
+      "n": 17888,
+      "pos": 87.5
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "is_rct",
+      "level": "0",
+      "n": 4024,
+      "pos": 88.6
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "is_rct",
+      "level": "1",
+      "n": 19168,
+      "pos": 88.2
+    },
+    {
+      "phase": "Phase 3",
+      "factor": "is_industry",
+      "level": "0",
+      "n": 23192,
+      "pos": 88.3
+    }
+  ],
+  "model": {
+    "auc": 0.755,
+    "pseudo_r2": 0.154,
+    "n_train": 99308,
+    "feature_names": [
+      "phase_clean_Phase 1/2",
+      "phase_clean_Phase 2",
+      "phase_clean_Phase 2/3",
+      "phase_clean_Phase 3",
+      "area_Cardiovascular",
+      "area_Immunology",
+      "area_Infectious Disease",
+      "area_Metabolic",
+      "area_Oncology",
+      "area_Other",
+      "area_Rare Disease",
+      "area_Respiratory",
+      "modality_Other",
+      "modality_Small Molecule",
+      "is_rct",
+      "log_enrollment",
+      "log_duration"
+    ],
+    "intercept": 3.610416129099477,
+    "coefficients": {
+      "phase_clean_Phase 1/2": -0.7541477988687715,
+      "phase_clean_Phase 2": -0.9214836131218853,
+      "phase_clean_Phase 2/3": -1.1793794133920135,
+      "phase_clean_Phase 3": -1.5948345992890782,
+      "area_Cardiovascular": -0.0871803085853526,
+      "area_Immunology": -0.1778289581594851,
+      "area_Infectious Disease": -0.16265027045090016,
+      "area_Metabolic": 0.2854475696212758,
+      "area_Oncology": -0.7394974504917077,
+      "area_Other": 0.09633473017821906,
+      "area_Rare Disease": -0.03865087912814363,
+      "area_Respiratory": 0.05784924762443481,
+      "modality_Other": 0.3519560295170335,
+      "modality_Small Molecule": -0.1523462097242135,
+      "is_rct": -0.43959774775473126,
+      "log_enrollment": 1.1865668470710675,
+      "log_duration": -0.12343578680466465
+    },
+    "reference_levels": {
+      "phase_clean": "Phase 1",
+      "area": "CNS",
+      "modality": "Biologic"
+    },
+    "scaler_params": {
+      "log_enrollment": {
+        "mean": 4.081069675196241,
+        "std": 1.380507011216145
+      },
+      "log_duration": {
+        "mean": 3.050828643539221,
+        "std": 0.9818750412074092
+      }
+    },
+    "phase_pos": {
+      "Phase 1": {
+        "pos": 90.7,
+        "ci_lo": 90.4,
+        "ci_hi": 91.1
+      },
+      "Phase 1/2": {
+        "pos": 81.2,
+        "ci_lo": 80.4,
+        "ci_hi": 82.1
+      },
+      "Phase 2": {
+        "pos": 83.0,
+        "ci_lo": 82.6,
+        "ci_hi": 83.4
+      },
+      "Phase 2/3": {
+        "pos": 86.9,
+        "ci_lo": 85.8,
+        "ci_hi": 87.9
+      },
+      "Phase 3": {
+        "pos": 88.3,
+        "ci_lo": 87.9,
+        "ci_hi": 88.7
+      }
+    }
+  }
+}

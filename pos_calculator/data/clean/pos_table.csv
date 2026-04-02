@@ -1,0 +1,136 @@
+phase,area,modality,n,n_success,pos_pct
+Phase 1,CNS,Biologic,174,163,93.7
+Phase 1,CNS,Other,395,370,93.7
+Phase 1,CNS,Small Molecule,1986,1829,92.1
+Phase 1,Cardiovascular,Biologic,66,55,83.3
+Phase 1,Cardiovascular,Other,163,152,93.3
+Phase 1,Cardiovascular,Small Molecule,836,770,92.1
+Phase 1,Immunology,Biologic,187,165,88.2
+Phase 1,Immunology,Other,38,33,86.8
+Phase 1,Immunology,Small Molecule,993,911,91.7
+Phase 1,Infectious Disease,Biologic,1113,1069,96.0
+Phase 1,Infectious Disease,Other,79,76,96.2
+Phase 1,Infectious Disease,Small Molecule,1563,1443,92.3
+Phase 1,Metabolic,Biologic,114,107,93.9
+Phase 1,Metabolic,Other,174,164,94.3
+Phase 1,Metabolic,Small Molecule,1835,1748,95.3
+Phase 1,Oncology,Biologic,1255,996,79.4
+Phase 1,Oncology,Other,316,249,78.8
+Phase 1,Oncology,Small Molecule,5439,4327,79.6
+Phase 1,Other,Biologic,938,859,91.6
+Phase 1,Other,Other,743,698,93.9
+Phase 1,Other,Small Molecule,12342,11695,94.8
+Phase 1,Rare Disease,Biologic,45,40,88.9
+Phase 1,Rare Disease,Other,17,14,82.4
+Phase 1,Rare Disease,Small Molecule,203,188,92.6
+Phase 1,Respiratory,Biologic,30,28,93.3
+Phase 1,Respiratory,Other,46,43,93.5
+Phase 1,Respiratory,Small Molecule,423,404,95.5
+Phase 1/2,CNS,Biologic,82,78,95.1
+Phase 1/2,CNS,Other,260,244,93.8
+Phase 1/2,CNS,Small Molecule,470,417,88.7
+Phase 1/2,Cardiovascular,Biologic,46,38,82.6
+Phase 1/2,Cardiovascular,Other,93,84,90.3
+Phase 1/2,Cardiovascular,Small Molecule,209,185,88.5
+Phase 1/2,Immunology,Biologic,72,54,75.0
+Phase 1/2,Immunology,Other,22,21,95.5
+Phase 1/2,Immunology,Small Molecule,210,173,82.4
+Phase 1/2,Infectious Disease,Biologic,353,334,94.6
+Phase 1/2,Infectious Disease,Other,48,46,95.8
+Phase 1/2,Infectious Disease,Small Molecule,280,242,86.4
+Phase 1/2,Metabolic,Biologic,47,36,76.6
+Phase 1/2,Metabolic,Other,90,84,93.3
+Phase 1/2,Metabolic,Small Molecule,240,217,90.4
+Phase 1/2,Oncology,Biologic,632,462,73.1
+Phase 1/2,Oncology,Other,185,149,80.5
+Phase 1/2,Oncology,Small Molecule,2245,1597,71.1
+Phase 1/2,Other,Biologic,324,277,85.5
+Phase 1/2,Other,Other,367,335,91.3
+Phase 1/2,Other,Small Molecule,1228,1016,82.7
+Phase 1/2,Rare Disease,Biologic,30,27,90.0
+Phase 1/2,Rare Disease,Other,25,18,72.0
+Phase 1/2,Rare Disease,Small Molecule,103,79,76.7
+Phase 1/2,Respiratory,Biologic,16,15,93.8
+Phase 1/2,Respiratory,Other,23,22,95.7
+Phase 1/2,Respiratory,Small Molecule,89,78,87.6
+Phase 2,CNS,Biologic,212,186,87.7
+Phase 2,CNS,Other,560,521,93.0
+Phase 2,CNS,Small Molecule,3205,2769,86.4
+Phase 2,Cardiovascular,Biologic,104,88,84.6
+Phase 2,Cardiovascular,Other,260,232,89.2
+Phase 2,Cardiovascular,Small Molecule,1416,1214,85.7
+Phase 2,Immunology,Biologic,259,222,85.7
+Phase 2,Immunology,Other,74,67,90.5
+Phase 2,Immunology,Small Molecule,1758,1488,84.6
+Phase 2,Infectious Disease,Biologic,896,839,93.6
+Phase 2,Infectious Disease,Other,147,133,90.5
+Phase 2,Infectious Disease,Small Molecule,1974,1684,85.3
+Phase 2,Metabolic,Biologic,81,68,84.0
+Phase 2,Metabolic,Other,246,236,95.9
+Phase 2,Metabolic,Small Molecule,1607,1426,88.7
+Phase 2,Oncology,Biologic,1428,1071,75.0
+Phase 2,Oncology,Other,658,538,81.8
+Phase 2,Oncology,Small Molecule,9020,6848,75.9
+Phase 2,Other,Biologic,712,612,86.0
+Phase 2,Other,Other,988,904,91.5
+Phase 2,Other,Small Molecule,6382,5403,84.7
+Phase 2,Rare Disease,Biologic,39,30,76.9
+Phase 2,Rare Disease,Other,24,22,91.7
+Phase 2,Rare Disease,Small Molecule,318,257,80.8
+Phase 2,Respiratory,Biologic,26,22,84.6
+Phase 2,Respiratory,Other,67,55,82.1
+Phase 2,Respiratory,Small Molecule,598,504,84.3
+Phase 2/3,CNS,Biologic,20,18,90.0
+Phase 2/3,CNS,Other,132,121,91.7
+Phase 2/3,CNS,Small Molecule,453,386,85.2
+Phase 2/3,Cardiovascular,Biologic,14,11,78.6
+Phase 2/3,Cardiovascular,Other,77,66,85.7
+Phase 2/3,Cardiovascular,Small Molecule,207,177,85.5
+Phase 2/3,Immunology,Biologic,25,24,96.0
+Phase 2/3,Immunology,Other,13,12,92.3
+Phase 2/3,Immunology,Small Molecule,114,92,80.7
+Phase 2/3,Infectious Disease,Biologic,93,88,94.6
+Phase 2/3,Infectious Disease,Other,37,34,91.9
+Phase 2/3,Infectious Disease,Small Molecule,311,250,80.4
+Phase 2/3,Metabolic,Biologic,11,11,100.0
+Phase 2/3,Metabolic,Other,99,93,93.9
+Phase 2/3,Metabolic,Small Molecule,180,165,91.7
+Phase 2/3,Oncology,Biologic,40,30,75.0
+Phase 2/3,Oncology,Other,74,66,89.2
+Phase 2/3,Oncology,Small Molecule,299,229,76.6
+Phase 2/3,Other,Biologic,91,83,91.2
+Phase 2/3,Other,Other,372,337,90.6
+Phase 2/3,Other,Small Molecule,952,856,89.9
+Phase 2/3,Rare Disease,Biologic,12,11,91.7
+Phase 2/3,Rare Disease,Other,4,4,100.0
+Phase 2/3,Rare Disease,Small Molecule,50,37,74.0
+Phase 2/3,Respiratory,Biologic,2,2,100.0
+Phase 2/3,Respiratory,Other,26,22,84.6
+Phase 2/3,Respiratory,Small Molecule,47,37,78.7
+Phase 3,CNS,Biologic,244,233,95.5
+Phase 3,CNS,Other,336,305,90.8
+Phase 3,CNS,Small Molecule,2603,2212,85.0
+Phase 3,Cardiovascular,Biologic,70,64,91.4
+Phase 3,Cardiovascular,Other,307,266,86.6
+Phase 3,Cardiovascular,Small Molecule,1573,1354,86.1
+Phase 3,Immunology,Biologic,322,286,88.8
+Phase 3,Immunology,Other,65,62,95.4
+Phase 3,Immunology,Small Molecule,1452,1313,90.4
+Phase 3,Infectious Disease,Biologic,919,881,95.9
+Phase 3,Infectious Disease,Other,171,155,90.6
+Phase 3,Infectious Disease,Small Molecule,1740,1523,87.5
+Phase 3,Metabolic,Biologic,89,87,97.8
+Phase 3,Metabolic,Other,216,208,96.3
+Phase 3,Metabolic,Small Molecule,1917,1732,90.3
+Phase 3,Oncology,Biologic,419,362,86.4
+Phase 3,Oncology,Other,408,350,85.8
+Phase 3,Oncology,Small Molecule,2366,1905,80.5
+Phase 3,Other,Biologic,585,533,91.1
+Phase 3,Other,Other,959,872,90.9
+Phase 3,Other,Small Molecule,5514,4980,90.3
+Phase 3,Rare Disease,Biologic,73,62,84.9
+Phase 3,Rare Disease,Other,27,22,81.5
+Phase 3,Rare Disease,Small Molecule,202,152,75.2
+Phase 3,Respiratory,Biologic,13,11,84.6
+Phase 3,Respiratory,Other,81,71,87.7
+Phase 3,Respiratory,Small Molecule,521,474,91.0
