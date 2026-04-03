@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Clinical Trial PoS — Investment Analytics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --white:   #ffffff;
+  --off:     #f6f5f3;
+  --rule:    #e2dfd9;
+  --rule2:   #c8c4bc;
+  --ink:     #0a0a0a;
+  --ink2:    #2a2a2a;
+  --mid:     #666666;
+  --faint:   #999999;
+  --blue:    #003399;
+  --blue2:   #0044cc;
+  --blue-lt: #eef1fa;
+  --red:     #cc2200;
+  --green:   #006633;
+  --G:       48px;   /* universal gutter */
+  --W:       1160px; /* max content width */
+  --f-h:     'EB Garamond', Georgia, serif;
+  --f-b:     'Barlow', sans-serif;
+  --f-c:     'Barlow Condensed', sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--white);color:var(--ink);font-family:var(--f-b);font-size:14px;line-height:1.6;overflow-x:hidden}
+
+/* ── TOPBAR ── */
+#topbar{position:fixed;top:0;left:0;right:0;height:48px;background:var(--ink);z-index:1000;display:flex;align-items:center}
+.tb-inner{width:100%;max-width:calc(var(--W) + var(--G)*2);margin:0 auto;padding:0 var(--G);display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--f-c);font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--white);display:flex;align-items:center;gap:14px}
+.brand-sep{width:1px;height:14px;background:rgba(255,255,255,.18)}
+.brand-sub{font-weight:400;letter-spacing:.1em;color:rgba(255,255,255,.36);font-size:11px}
+.nav-tabs{display:flex;height:48px}
+.nav-tab{font-family:var(--f-c);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.38);padding:0 18px;display:flex;align-items:center;cursor:pointer;border-bottom:2px solid transparent;transition:color .18s,border-color .18s;user-select:none;white-space:nowrap}
+.nav-tab:hover{color:rgba(255,255,255,.72)}
+.nav-tab.active{color:var(--white);border-bottom-color:var(--white)}
+
+/* ── PAGES ── */
+.page{display:none;padding-top:48px;min-height:100vh;animation:fi .22s ease}
+.page.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CONTAINER ── */
+.ct{max-width:var(--W);margin:0 auto;padding:0 var(--G)}
+
+/* ── SECTION LABEL ── */
+.slabel{font-family:var(--f-c);font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.slabel::before{content:'';display:block;width:20px;height:1px;background:currentColor}
+.stitle{font-family:var(--f-h);font-size:clamp(22px,2.4vw,34px);font-weight:500;color:var(--ink);line-height:1.15;margin-bottom:16px}
+.sbody{font-size:13.5px;color:var(--mid);line-height:1.7}
+
+/* ═══════════════════════════════════════
+   PAGE 0 — CALCULATOR
+   Hero: light background, editorial split
+═══════════════════════════════════════ */
+.calc-hero{
+  background:var(--white);
+  border-bottom:2px solid var(--ink);
+  padding:28px 0 0;
+}
+.calc-hero-inner{
+  display:grid;
+  grid-template-columns:1fr 400px;
+  gap:0;
+  align-items:stretch;
+}
+/* left column: text */
+.calc-hero-left{
+  padding-bottom:28px;
+  padding-right:56px;
+  border-right:1px solid var(--rule);
+}
+.calc-hero-tag{
+  font-family:var(--f-c);font-size:10px;font-weight:700;
+  letter-spacing:.26em;text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.calc-hero-tag::before{content:'';display:block;width:24px;height:1px;background:var(--blue)}
+.calc-hero-title{
+  font-family:var(--f-h);
+  font-size:clamp(24px,2.4vw,38px);
+  font-weight:500;
+  color:var(--ink);
+  line-height:1.1;
+  letter-spacing:-.01em;
+  margin-bottom:14px;
+  white-space:nowrap;
+}
+.calc-hero-desc{
+  font-size:13px;color:var(--mid);line-height:1.65;
+  max-width:480px;
+  margin-bottom:24px;
+  border-left:2px solid var(--rule);
+  padding-left:14px;
+}
+/* stats row */
+.hero-kpi-row{display:flex;gap:0;border-top:1px solid var(--rule);padding-top:20px}
+.hkpi{padding:0 28px 0 0;border-right:1px solid var(--rule);margin-right:28px}
+.hkpi:last-child{border:none;margin:0;padding:0}
+.hkpi-n{font-family:var(--f-h);font-size:24px;font-weight:500;color:var(--ink);line-height:1}
+.hkpi-l{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+
+/* right column: accent panel — compact */
+.calc-hero-right{
+  background:var(--blue);
+  padding:28px 32px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.calc-hero-right::before{
+  content:'';position:absolute;
+  right:-30px;bottom:-30px;
+  width:150px;height:150px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:50%;
+}
+.calc-hero-right::after{
+  content:'';position:absolute;
+  right:-6px;bottom:-6px;
+  width:90px;height:90px;
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:50%;
+}
+.chr-label{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px}
+.chr-auc{font-family:var(--f-h);font-size:44px;font-weight:500;color:var(--white);line-height:1}
+.chr-sub{font-family:var(--f-c);font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;margin-bottom:18px}
+.chr-divider{border:none;border-top:1px solid rgba(255,255,255,.1);margin-bottom:16px}
+.chr-row{margin-bottom:10px;display:flex;align-items:baseline;gap:12px}
+.chr-row-label{font-family:var(--f-c);font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);min-width:80px;flex-shrink:0}
+.chr-row-val{font-family:var(--f-c);font-size:14px;font-weight:600;color:rgba(255,255,255,.9);line-height:1}
+
+/* ── CALC BODY ── */
+.calc-body{padding:48px 0 80px}
+.calc-grid{
+  display:grid;grid-template-columns:380px 1fr;gap:0;
+  border:1px solid var(--rule);border-top:none;
+}
+.calc-left{padding:36px 40px;border-right:1px solid var(--rule);background:var(--off)}
+.calc-right{padding:36px 40px;background:var(--white)}
+.chead{font-family:var(--f-c);font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:28px}
+.frow{margin-bottom:20px}
+.frow label{display:block;font-family:var(--f-c);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:6px}
+.frow select{width:100%;background:var(--white);border:1px solid var(--rule2);color:var(--ink);padding:10px 14px;font-family:var(--f-b);font-size:13.5px;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .15s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.frow select:focus{outline:none;border-color:var(--blue)}
+.frow input[type=range]{width:100%;cursor:pointer;accent-color:var(--blue)}
+.range-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-top:4px}
+.enroll-val{font-family:var(--f-c);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.btn-run{width:100%;background:var(--blue);border:none;color:var(--white);padding:16px 24px;font-family:var(--f-c);font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:background .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-run:hover{background:var(--blue2)}
+.btn-arr{font-size:18px;font-weight:300;transition:transform .2s}
+.btn-run:hover .btn-arr{transform:translateX(4px)}
+
+/* result */
+.result-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;min-height:380px;text-align:center}
+.re-ring{width:80px;height:80px;border:1px solid var(--rule);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.re-ring-i{width:48px;height:48px;border:1px solid var(--rule2);border-radius:50%}
+.re-txt{font-family:var(--f-c);font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.result-panel{display:none}
+.result-panel.show{display:block}
+.res-score-row{display:flex;align-items:flex-end;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--rule);margin-bottom:24px}
+.res-score-big{font-family:var(--f-h);font-size:80px;font-weight:500;line-height:1;color:var(--ink)}
+.res-score-delta{font-family:var(--f-c);font-size:12px;font-weight:700;letter-spacing:.1em;padding:4px 10px;margin-bottom:8px;display:inline-block}
+.delta-pos{background:var(--green);color:#fff}
+.delta-neg{background:var(--red);color:#fff}
+.res-score-label{font-family:var(--f-c);font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mid)}
+.res-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);margin-bottom:20px}
+.res-kpi{padding:16px 18px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.res-kpi:nth-child(2n){border-right:none}
+.res-kpi:nth-child(3),.res-kpi:nth-child(4){border-bottom:none}
+.res-kpi-label{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.res-kpi-value{font-family:var(--f-h);font-size:22px;font-weight:500;color:var(--ink)}
+.gauge-bar-wrap{margin-bottom:20px}
+.gauge-bar-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.gauge-bar-label{font-family:var(--f-c);font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mid)}
+.gauge-bar-pct{font-family:var(--f-c);font-size:12px;font-weight:700;color:var(--ink)}
+.gauge-bar-track{height:4px;background:var(--rule);position:relative}
+.gauge-bar-fill{height:100%;background:var(--blue);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.gauge-bar-bench{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--faint)}
+.gauge-bar-bench-label{position:absolute;top:-20px;font-family:var(--f-c);font-size:9px;color:var(--faint);transform:translateX(-50%);white-space:nowrap}
+.res-note{background:var(--blue-lt);border-left:3px solid var(--blue);padding:14px 18px;font-size:12.5px;color:var(--mid);line-height:1.6}
+.res-note-head{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+
+/* ═══════════════════════════════════════
+   PAGE 1 — BENCHMARK REPORT
+═══════════════════════════════════════ */
+.page-hero{padding:48px 0 40px;border-bottom:2px solid var(--ink)}
+.page-hero-grid{display:grid;grid-template-columns:1fr auto;gap:60px;align-items:end}
+.page-hero-kpis{display:flex;gap:40px}
+.ph-kpi-n{font-family:var(--f-h);font-size:40px;font-weight:500;color:var(--ink);line-height:1}
+.ph-kpi-l{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-top:8px}
+
+/* stat strip */
+.stat-strip{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--rule)}
+.stat-cell{padding:20px 24px;border-right:1px solid var(--rule)}
+.stat-cell:last-child{border-right:none}
+.stat-cell-n{font-family:var(--f-h);font-size:28px;font-weight:500;color:var(--ink);line-height:1;margin-bottom:6px}
+.stat-cell-l{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.stat-cell-sub{font-size:10.5px;color:var(--faint);margin-top:3px}
+
+/* content layout */
+.csec{padding:48px 0;border-bottom:1px solid var(--rule)}
+.csec:last-child{border-bottom:none;padding-bottom:80px}
+/* FIX: sidebar is fixed 220px; it never grows, findings stay inside */
+.cgrid{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start}
+.csidebar{min-width:0}
+
+/* chart card */
+.chart-card{border:1px solid var(--rule)}
+.chart-card-head{padding:16px 22px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+.chart-card-title{font-size:13px;font-weight:600;color:var(--ink)}
+.chart-card-note{font-family:var(--f-c);font-size:10px;color:var(--faint);letter-spacing:.06em}
+.chart-card-body{padding:24px}
+
+/* heatmap */
+.hm-table{border-collapse:collapse;width:100%;font-size:11.5px}
+.hm-table th{padding:10px 14px;text-align:center;font-family:var(--f-c);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);background:var(--off);border-bottom:1px solid var(--rule)}
+.hm-table th:first-child{text-align:left}
+.hm-table td{padding:10px 14px;text-align:center;border:1px solid var(--rule);font-family:var(--f-c);font-weight:600;font-size:12px}
+.hm-table td:first-child{text-align:left;font-family:var(--f-b);font-weight:500;font-size:12px;color:var(--ink2);background:var(--off);white-space:nowrap}
+.hm-empty{color:var(--faint)!important;font-weight:300!important}
+
+/* factor charts */
+.factor-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* FIX: findings constrained within sidebar width */
+.finding{
+  padding:20px 22px;
+  border-left:2px solid var(--ink);
+  background:var(--off);
+  margin-bottom:12px;
+  /* no margin-left/right — stays within cgrid column */
+}
+.finding-n{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:6px}
+.finding-text{font-size:12.5px;color:var(--ink2);line-height:1.55}
+.finding-stat{font-family:var(--f-h);font-size:24px;font-weight:500;color:var(--blue);display:block;margin-top:8px}
+
+/* ═══════════════════════════════════════
+   PAGE 2 — METHODOLOGY
+═══════════════════════════════════════ */
+.meth-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule)}
+.meth-cell{padding:28px 32px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.meth-cell:nth-child(2n){border-right:none}
+.meth-cell:nth-last-child(-n+2){border-bottom:none}
+.meth-icon{width:28px;height:28px;background:var(--ink);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-family:var(--f-c);font-size:12px;font-weight:700;color:var(--white)}
+.meth-cell h3{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.meth-cell p{font-size:12.5px;color:var(--mid);line-height:1.65}
+.model-table{width:100%;border-collapse:collapse;font-size:12px}
+.model-table th{text-align:left;padding:10px 16px;font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);border-bottom:2px solid var(--ink);background:var(--off)}
+.model-table td{padding:10px 16px;border-bottom:1px solid var(--rule);color:var(--ink2);font-size:12px}
+.model-table tr:last-child td{border-bottom:none}
+.model-table td.num{font-family:var(--f-c);font-weight:600;text-align:right}
+.model-table td.pos{color:var(--green)}
+.model-table td.neg{color:var(--red)}
+
+/* ═══════════════════════════════════════
+   PAGE 3 — RESOURCES
+═══════════════════════════════════════ */
+.res-hero{background:var(--ink);padding:52px 0 44px}
+.res-hero-title{font-family:var(--f-h);font-size:clamp(28px,3vw,44px);font-weight:500;color:var(--white);margin-bottom:12px}
+.res-hero-sub{font-size:13.5px;color:rgba(255,255,255,.38);max-width:480px;line-height:1.65}
+.res-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink);border-left:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.res-card{padding:34px 30px;border-right:1px solid var(--rule);cursor:pointer;transition:background .15s;text-decoration:none;display:block}
+.res-card:last-child{border-right:none}
+.res-card:hover{background:var(--off)}
+.res-card-num{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:22px}
+.res-card-type{font-family:var(--f-c);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.res-card-title{font-family:var(--f-h);font-size:21px;font-weight:500;color:var(--ink);margin-bottom:10px;line-height:1.2}
+.res-card-desc{font-size:12.5px;color:var(--mid);line-height:1.6;margin-bottom:24px}
+.res-card-cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-c);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px;transition:color .15s,border-color .15s}
+.res-card:hover .res-card-cta{color:var(--blue);border-color:var(--blue)}
+.data-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:48px 0}
+.data-info-label{font-family:var(--f-c);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:8px}
+.data-info-val{font-size:13px;color:var(--ink2);line-height:1.7}
+.data-info-val strong{color:var(--ink);font-weight:600}
+
+/* ── CALC PAGE NAV ── */
+.calc-page-nav{margin-top:28px;padding-top:22px;border-top:1px solid var(--rule)}
+.cpn-label{font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+.cpn-links{display:flex;gap:0}
+.cpn-link{flex:1;padding:0 20px 0 0;margin-right:20px;border-right:1px solid var(--rule);cursor:pointer}
+.cpn-link:last-child{border-right:none;padding-right:0;margin-right:0}
+.cpn-link-type{font-family:var(--f-c);font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+.cpn-link-name{font-size:12.5px;font-weight:500;color:var(--mid);transition:color .15s}
+.cpn-link:hover .cpn-link-name{color:var(--blue)}
+
+/* ── TOOLTIP ── */
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--white);padding:10px 16px;font-size:12px;z-index:9999;opacity:0;transition:opacity .1s;max-width:220px;line-height:1.5}
+.tip.show{opacity:1}
+.tip strong{display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--ink);padding:26px 0;border-top:1px solid #1a1a1a}
+.sf-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.sf-inner p{font-family:var(--f-c);font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.1em;text-transform:uppercase}
+.footer-pills{display:flex;gap:8px}
+.footer-pill{font-family:var(--f-c);font-size:9px;color:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.09);padding:3px 10px;letter-spacing:.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="tb-inner">
+    <div class="brand">
+      <span>PoS Analytics</span>
+      <div class="brand-sep"></div>
+      <span class="brand-sub">Clinical Trial Intelligence</span>
+    </div>
+    <div class="nav-tabs">
+      <div class="nav-tab active" data-page="page-calc">Calculator</div>
+      <div class="nav-tab" data-page="page-bench">Benchmark Report</div>
+      <div class="nav-tab" data-page="page-meth">Methodology</div>
+      <div class="nav-tab" data-page="page-res">Resources</div>
+    </div>
+  </div>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<!-- ══════════════════════════════════
+     PAGE: CALCULATOR
+══════════════════════════════════════ -->
+<div class="page active" id="page-calc">
+
+  <!-- HERO: light, editorial, investment-grade -->
+  <div class="calc-hero">
+    <div class="ct">
+      <div class="calc-hero-inner">
+
+        <!-- LEFT: title + description + stats -->
+        <div class="calc-hero-left">
+          <div class="calc-hero-tag">Quantitative Research &nbsp;·&nbsp; Proprietary Model</div>
+          <div class="calc-hero-title">Asset-Level Probability<br>of Success Calculator</div>
+          <div class="calc-hero-desc">
+            Input trial characteristics to generate a characteristic-adjusted PoS estimate
+            from logistic regression trained on 99,308 resolved clinical trials
+            registered on ClinicalTrials.gov, 2005–2025.
+          </div>
+          <div class="hero-kpi-row">
+            <div class="hkpi"><div class="hkpi-n">99,308</div><div class="hkpi-l">Trials in Cohort</div></div>
+            <div class="hkpi"><div class="hkpi-n">86.7%</div><div class="hkpi-l">Overall Completion</div></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: blue accent panel with key model metrics -->
+        <div class="calc-hero-right">
+          <div class="chr-label">Model AUC</div>
+          <div class="chr-auc">0.755</div>
+          <div class="chr-sub">5-Fold Cross-Validation</div>
+          <hr class="chr-divider"/>
+          <div class="chr-row">
+            <div class="chr-row-label">Pseudo R²</div>
+            <div class="chr-row-val">0.154</div>
+          </div>
+          <div class="chr-row">
+            <div class="chr-row-label">Features</div>
+            <div class="chr-row-val">17 predictors</div>
+          </div>
+          <div class="chr-row">
+            <div class="chr-row-label">Study Period</div>
+            <div class="chr-row-val">2005 – 2025</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR BODY -->
+  <div class="calc-body">
+    <div class="ct">
+      <div class="calc-grid">
+
+        <!-- LEFT: INPUTS -->
+        <div class="calc-left">
+          <div class="chead">Trial Parameters</div>
+          <div class="frow">
+            <label>Clinical Phase</label>
+            <select id="sel-phase">
+              <option value="Phase 1">Phase 1 — Safety &amp; Dose-Finding</option>
+              <option value="Phase 2" selected>Phase 2 — Efficacy &amp; Dosing</option>
+              <option value="Phase 3">Phase 3 — Pivotal Confirmatory</option>
+              <option value="Phase 1/2">Phase 1/2 — Combined</option>
+              <option value="Phase 2/3">Phase 2/3 — Combined</option>
+            </select>
+          </div>
+          <div class="frow">
+            <label>Therapeutic Area</label>
+            <select id="sel-area">
+              <option value="Oncology">Oncology</option>
+              <option value="CNS" selected>CNS / Neurology</option>
+              <option value="Cardiovascular">Cardiovascular</option>
+              <option value="Infectious Disease">Infectious Disease</option>
+              <option value="Metabolic">Metabolic / Endocrine</option>
+              <option value="Immunology">Immunology / Autoimmune</option>
+              <option value="Respiratory">Respiratory</option>
+              <option value="Rare Disease">Rare Disease / Genetic</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="frow">
+            <label>Drug Modality</label>
+            <select id="sel-modality">
+              <option value="Small Molecule" selected>Small Molecule</option>
+              <option value="Biologic">Biologic / Antibody / Gene Therapy</option>
+              <option value="Other">Other / Combination</option>
+            </select>
+          </div>
+          <div class="frow">
+            <label>Sponsor Type</label>
+            <select id="sel-sponsor">
+              <option value="1" selected>Industry-Sponsored</option>
+              <option value="0">Academic / NIH / Non-Profit</option>
+            </select>
+          </div>
+          <div class="frow">
+            <label>Trial Design</label>
+            <select id="sel-rct">
+              <option value="1" selected>Randomised Controlled Trial (RCT)</option>
+              <option value="0">Single-Arm / Open-Label</option>
+            </select>
+          </div>
+          <div class="frow">
+            <label>Planned Enrolment</label>
+            <div class="enroll-val" id="enroll-lbl">300 <span style="font-size:12px;font-weight:400;color:var(--mid)">patients</span></div>
+            <input type="range" id="enroll-slider" min="10" max="3000" value="300" step="10"/>
+            <div class="range-meta"><span>10</span><span>3,000</span></div>
+          </div>
+          <button class="btn-run" onclick="calculate()">Run Estimate <span class="btn-arr">→</span></button>
+        </div>
+
+        <!-- RIGHT: OUTPUT -->
+        <div class="calc-right">
+          <div class="chead">Model Output</div>
+          <div class="result-empty" id="result-empty" style="display:none">
+            <div class="re-ring"><div class="re-ring-i"></div></div>
+            <div class="re-txt">Configure parameters and run estimate</div>
+          </div>
+          <div class="result-panel show" id="result-panel">
+            <div class="res-score-row">
+              <div class="res-score-big" id="res-pct">—</div>
+              <div>
+                <div id="res-delta-badge" class="res-score-delta delta-pos" style="display:none">—</div>
+                <div class="res-score-label" id="res-phase-lbl">Select parameters and run estimate to generate PoS</div>
+              </div>
+            </div>
+            <div class="gauge-bar-wrap">
+              <div class="gauge-bar-head">
+                <div class="gauge-bar-label">Historical Percentile</div>
+                <div class="gauge-bar-pct" id="res-pctile">—</div>
+              </div>
+              <div class="gauge-bar-track">
+                <div class="gauge-bar-fill" id="pctile-fill" style="width:0%"></div>
+                <div class="gauge-bar-bench" id="bench-marker" style="left:83%">
+                  <div class="gauge-bar-bench-label" id="bench-label">83%</div>
+                </div>
+              </div>
+            </div>
+            <div class="res-kpi-grid">
+              <div class="res-kpi">
+                <div class="res-kpi-label">95% Confidence Interval</div>
+                <div class="res-kpi-value" id="res-ci">—</div>
+              </div>
+              <div class="res-kpi">
+                <div class="res-kpi-label">Phase Benchmark</div>
+                <div class="res-kpi-value" id="res-bench">—</div>
+              </div>
+              <div class="res-kpi">
+                <div class="res-kpi-label">Model AUC</div>
+                <div class="res-kpi-value">0.755</div>
+              </div>
+              <div class="res-kpi">
+                <div class="res-kpi-label">Training Cohort</div>
+                <div class="res-kpi-value">99,308</div>
+              </div>
+            </div>
+            <div class="res-note">
+              <div class="res-note-head">Interpretation</div>
+              Characteristic-adjusted PoS for rNPV models — replaces the blunt phase-average benchmark with an asset-specific figure. Confidence interval reflects statistical precision of the underlying cohort.
+            </div>
+          </div>
+
+          <!-- Page navigation links -->
+          <div class="calc-page-nav">
+            <div class="cpn-label">Explore the full research</div>
+            <div class="cpn-links">
+              <div class="cpn-link" onclick="switchPage('page-bench')">
+                <div class="cpn-link-type">Report</div>
+                <div class="cpn-link-name">Benchmark Data →</div>
+              </div>
+              <div class="cpn-link" onclick="switchPage('page-meth')">
+                <div class="cpn-link-type">Documentation</div>
+                <div class="cpn-link-name">Methodology →</div>
+              </div>
+              <div class="cpn-link" onclick="switchPage('page-res')">
+                <div class="cpn-link-type">Download</div>
+                <div class="cpn-link-name">Data &amp; Code →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: BENCHMARK REPORT
+══════════════════════════════════════ -->
+<div class="page" id="page-bench">
+  <div class="page-hero">
+    <div class="ct">
+      <div class="page-hero-grid">
+        <div>
+          <div class="slabel">Benchmark Report</div>
+          <div class="stitle" style="font-size:clamp(24px,2.6vw,36px)">Industry Probability of Success<br>by Phase, Area &amp; Modality</div>
+          <div class="sbody">Empirical completion rates for 99,308 resolved interventional trials registered 2005–2025. Stratified benchmarks for rNPV modelling and portfolio construction.</div>
+        </div>
+        <div class="page-hero-kpis">
+          <div><div class="ph-kpi-n">99,308</div><div class="ph-kpi-l">Trials</div></div>
+          <div><div class="ph-kpi-n">9</div><div class="ph-kpi-l">Areas</div></div>
+          <div><div class="ph-kpi-n">3</div><div class="ph-kpi-l">Modalities</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ct"><div class="stat-strip" id="stat-strip"></div></div>
+
+  <!-- §1 Phase benchmarks -->
+  <div class="csec">
+    <div class="ct">
+      <div class="cgrid">
+        <div class="csidebar">
+          <div class="slabel">Section 01</div>
+          <div class="stitle" style="font-size:clamp(18px,1.8vw,24px)">Phase-Level Completion Rates</div>
+          <div class="sbody" style="font-size:13px;margin-top:12px">Pooled completion rates with 95% Wilson CIs. Phase 1 shows highest completion; Phase 2 is the highest-attrition gate.</div>
+          <div class="finding" style="margin-top:20px">
+            <div class="finding-n">Key Finding</div>
+            <div class="finding-text">Phase 2 shows the widest variation across therapeutic areas — the primary source of differentiated PoS.</div>
+            <span class="finding-stat">83.0%</span>
+          </div>
+        </div>
+        <div>
+          <div class="chart-card">
+            <div class="chart-card-head">
+              <div class="chart-card-title">Trial Completion Rate by Phase — All Therapeutic Areas</div>
+              <div class="chart-card-note">Bar = estimate · Whisker = 95% CI · n = cohort size</div>
+            </div>
+            <div class="chart-card-body"><div id="chart-bars"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §2 Heatmap -->
+  <div class="csec">
+    <div class="ct">
+      <div class="cgrid">
+        <div class="csidebar">
+          <div class="slabel">Section 02</div>
+          <div class="stitle" style="font-size:clamp(18px,1.8vw,24px)">Phase × Area Matrix</div>
+          <div class="sbody" style="font-size:13px;margin-top:12px">Cross-tabulation of completion rates. Colour intensity scales with PoS. Cells with n &lt; 30 suppressed.</div>
+          <div class="finding" style="margin-top:20px">
+            <div class="finding-n">Notable Signal</div>
+            <div class="finding-text">Oncology Phase 1/2 records the lowest observed PoS across all combinations.</div>
+            <span class="finding-stat">72.1%</span>
+          </div>
+          <div class="finding">
+            <div class="finding-n">Notable Signal</div>
+            <div class="finding-text">Metabolic Phase 2/3 and Respiratory Phase 1 show the highest rates.</div>
+            <span class="finding-stat">95.2%</span>
+          </div>
+        </div>
+        <div>
+          <div class="chart-card">
+            <div class="chart-card-head">
+              <div class="chart-card-title">Completion Rate (%) — Phase × Disease Area</div>
+              <div class="chart-card-note">Deeper blue = higher PoS · Hover for detail</div>
+            </div>
+            <div class="chart-card-body" style="overflow-x:auto">
+              <table class="hm-table" id="heatmap"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- §3 Factor Analysis -->
+  <div class="csec">
+    <div class="ct">
+      <div class="cgrid">
+        <div class="csidebar">
+          <div class="slabel">Section 03</div>
+          <div class="stitle" style="font-size:clamp(18px,1.8vw,24px)">Factor Analysis</div>
+          <div class="sbody" style="font-size:13px;margin-top:12px">Within-phase comparison of completion rates across key design parameters, tested via chi-square.</div>
+          <div class="finding" style="margin-top:20px">
+            <div class="finding-n">Modality Effect</div>
+            <div class="finding-text">Other modalities outperform Small Molecule and Biologic in Phase 2.</div>
+            <span class="finding-stat">+7.4 pp</span>
+          </div>
+          <div class="finding">
+            <div class="finding-n">Design Effect</div>
+            <div class="finding-text">RCTs complete at a higher rate than single-arm trials in Phase 2.</div>
+            <span class="finding-stat">85.4% vs 78.4%</span>
+          </div>
+        </div>
+        <div>
+          <div class="chart-card" style="margin-bottom:12px">
+            <div class="chart-card-head">
+              <div class="chart-card-title">By Drug Modality (Phase 2)</div>
+            </div>
+            <div class="chart-card-body" style="padding:16px 20px"><div id="chart-modality"></div></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-head">
+              <div class="chart-card-title">Trial Design: RCT vs. Single-Arm (Phase 2)</div>
+            </div>
+            <div class="chart-card-body" style="padding:16px 20px"><div id="chart-rct"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: METHODOLOGY
+══════════════════════════════════════ -->
+<div class="page" id="page-meth">
+  <div class="page-hero">
+    <div class="ct">
+      <div class="slabel">Methodology</div>
+      <div class="stitle">Data Provenance &amp; Analytical Framework</div>
+      <div class="sbody">Transparent disclosure of data sources, definitions, model architecture, and limitations. Review before applying PoS estimates in investment models.</div>
+    </div>
+  </div>
+
+  <div class="csec">
+    <div class="ct">
+      <div class="meth-grid">
+        <div class="meth-cell"><div class="meth-icon">01</div><h3>Data Source</h3><p>AACT (Aggregate Analysis of ClinicalTrials.gov), curated by CTTI with FDA support. Covers 480,000+ registered studies. Monthly static snapshots used for reproducibility.</p></div>
+        <div class="meth-cell"><div class="meth-icon">02</div><h3>Success Definition</h3><p>A trial is classified as successful if <em>overall_status = Completed</em>. Terminated or Withdrawn trials are failures. Trials stopped for external non-scientific reasons are excluded to preserve signal integrity.</p></div>
+        <div class="meth-cell"><div class="meth-icon">03</div><h3>Statistical Method</h3><p>Phase-level PoS uses Wilson score confidence intervals. The calculator applies logistic regression with phase, area, modality, sponsor, design, and log-transformed enrolment as predictors.</p></div>
+        <div class="meth-cell"><div class="meth-icon">04</div><h3>Area Classification</h3><p>Disease areas assigned via MeSH term matching from the AACT conditions table. Each trial maps to the highest-priority bucket from a ranked keyword hierarchy across 9 therapeutic areas.</p></div>
+        <div class="meth-cell"><div class="meth-icon">05</div><h3>Scope &amp; Eligibility</h3><p>Interventional studies only. Phases 1, 2, 3 and combinations (1/2, 2/3). Trials with enrollment &gt; 0 and registration date 2005–2025. Cohort spans all sponsor types.</p></div>
+        <div class="meth-cell"><div class="meth-icon">06</div><h3>Limitations</h3><p>Registration was inconsistent before 2008. Trial completion ≠ drug approval. Sponsor quality, protocol nuances, and competitive landscape are not captured. For analytical purposes only — not investment advice.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="csec">
+    <div class="ct">
+      <div class="cgrid">
+        <div class="csidebar">
+          <div class="slabel">Model Details</div>
+          <div class="stitle" style="font-size:clamp(18px,1.8vw,24px)">Logistic Regression Coefficients</div>
+          <div class="sbody" style="font-size:13px;margin-top:12px">Reference levels: Phase 1, CNS area, Biologic modality.</div>
+          <div style="margin-top:20px;padding:18px 20px;background:var(--off);border:1px solid var(--rule)">
+            <div style="font-family:var(--f-c);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:6px">Model AUC</div>
+            <div style="font-family:var(--f-h);font-size:36px;font-weight:500;color:var(--blue)">0.755</div>
+            <div style="font-family:var(--f-c);font-size:10px;color:var(--mid);margin-top:4px">5-fold cross-validation</div>
+            <div style="border-top:1px solid var(--rule);margin-top:14px;padding-top:14px">
+              <div style="font-size:12px;color:var(--mid)">Pseudo-R²: <strong style="color:var(--ink)">0.154</strong></div>
+              <div style="font-size:12px;color:var(--mid);margin-top:4px">n: <strong style="color:var(--ink)">99,308</strong></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="chart-card">
+            <div class="chart-card-head">
+              <div class="chart-card-title">Coefficient Table — Log-Odds Scale</div>
+              <div class="chart-card-note">Positive = increases PoS vs reference</div>
+            </div>
+            <div class="chart-card-body" style="padding:0">
+              <table class="model-table" id="coef-table"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE: RESOURCES
+══════════════════════════════════════ -->
+<div class="page" id="page-res">
+  <div class="res-hero">
+    <div class="ct">
+      <div class="slabel" style="color:rgba(255,255,255,.32)">Resources</div>
+      <div class="res-hero-title">Data, Code &amp; Documentation</div>
+      <div class="res-hero-sub">All underlying data and source code are publicly available for review, replication, and extension.</div>
+    </div>
+  </div>
+  <div style="padding:0 0 80px">
+    <div class="ct">
+      <div class="res-cards-grid">
+        <a class="res-card" href="#" id="dl-json-btn">
+          <div class="res-card-num">01</div>
+          <div class="res-card-type">Dataset</div>
+          <div class="res-card-title">Dashboard Data</div>
+          <div class="res-card-desc">Complete benchmark data, heatmap values, factor analysis, and model coefficients. JSON format, immediately loadable.</div>
+          <div class="res-card-cta">Download JSON &nbsp;↓</div>
+        </a>
+        <a class="res-card" href="https://github.com/XintongEllaLu/pos_calculator" target="_blank" rel="noopener">
+          <div class="res-card-num">02</div>
+          <div class="res-card-type">Source Code</div>
+          <div class="res-card-title">PoS Calculator</div>
+          <div class="res-card-desc">Full source code for data processing, logistic regression model training, and this interactive report. MIT licensed on GitHub.</div>
+          <div class="res-card-cta">View on GitHub &nbsp;→</div>
+        </a>
+        <a class="res-card" href="https://aact.ctti-clinicaltrials.org/" target="_blank" rel="noopener">
+          <div class="res-card-num">03</div>
+          <div class="res-card-type">Primary Database</div>
+          <div class="res-card-title">AACT / ClinicalTrials.gov</div>
+          <div class="res-card-desc">Primary data source for this analysis. Maintained by CTTI with FDA support. Freely available for academic and commercial use.</div>
+          <div class="res-card-cta">Access Database &nbsp;→</div>
+        </a>
+      </div>
+      <div class="data-info-grid" style="border-top:1px solid var(--rule)">
+        <div>
+          <div class="data-info-label">Data Snapshot</div>
+          <div class="data-info-val"><strong>99,308 trials</strong> · Interventional · Phase 1–3 · Resolved outcomes only</div>
+        </div>
+        <div>
+          <div class="data-info-label">Model Architecture</div>
+          <div class="data-info-val">Logistic regression · <strong>17 features</strong> · Phase, area, modality, sponsor, design, log-enrollment, log-duration</div>
+        </div>
+        <div>
+          <div class="data-info-label">Coverage</div>
+          <div class="data-info-val"><strong>9 therapeutic areas</strong> · 3 modalities · 5 phase classifications · <strong>2005–2025</strong></div>
+        </div>
+        <div>
+          <div class="data-info-label">Disclaimer</div>
+          <div class="data-info-val">For analytical purposes only. Trial completion does not equal drug approval. Not investment advice.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="site-footer">
+  <div class="ct">
+    <div class="sf-inner">
+      <p>Clinical Trial PoS Analytics · AACT / ClinicalTrials.gov · Analytical purposes only</p>
+      <div class="footer-pills">
+        <span class="footer-pill">AACT</span>
+        <span class="footer-pill">statsmodels</span>
+        <span class="footer-pill">scikit-learn</span>
+        <span class="footer-pill">D3.js v7</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {"summary":{"total_trials":99308,"success_rate":86.7,"n_areas":9,"n_modalities":3,"date_range":"2005-2025","model_auc":0.755},"benchmark_bars":[{"phase":"Phase 1","n":31513,"n_success":28596,"group":"Overall","pos_pct":90.7,"ci_lo":90.4,"ci_hi":91.1,"reliable":true},{"phase":"Phase 1/2","n":7789,"n_success":6328,"group":"Overall","pos_pct":81.2,"ci_lo":80.4,"ci_hi":82.1,"reliable":true},{"phase":"Phase 2","n":33059,"n_success":27439,"group":"Overall","pos_pct":83.0,"ci_lo":82.6,"ci_hi":83.4,"reliable":true},{"phase":"Phase 2/3","n":3755,"n_success":3262,"group":"Overall","pos_pct":86.9,"ci_lo":85.8,"ci_hi":87.9,"reliable":true},{"phase":"Phase 3","n":23192,"n_success":20475,"group":"Overall","pos_pct":88.3,"ci_lo":87.9,"ci_hi":88.7,"reliable":true}],"heatmap":[{"phase_clean":"Phase 1","area":"CNS","n":2555,"pos":92.4},{"phase_clean":"Phase 1","area":"Cardiovascular","n":1065,"pos":91.7},{"phase_clean":"Phase 1","area":"Immunology","n":1218,"pos":91.1},{"phase_clean":"Phase 1","area":"Infectious Disease","n":2755,"pos":93.9},{"phase_clean":"Phase 1","area":"Metabolic","n":2123,"pos":95.1},{"phase_clean":"Phase 1","area":"Oncology","n":7010,"pos":79.5},{"phase_clean":"Phase 1","area":"Other","n":14023,"pos":94.5},{"phase_clean":"Phase 1","area":"Rare Disease","n":265,"pos":91.3},{"phase_clean":"Phase 1","area":"Respiratory","n":499,"pos":95.2},{"phase_clean":"Phase 1/2","area":"CNS","n":812,"pos":91.0},{"phase_clean":"Phase 1/2","area":"Cardiovascular","n":348,"pos":88.2},{"phase_clean":"Phase 1/2","area":"Immunology","n":304,"pos":81.6},{"phase_clean":"Phase 1/2","area":"Infectious Disease","n":681,"pos":91.3},{"phase_clean":"Phase 1/2","area":"Metabolic","n":377,"pos":89.4},{"phase_clean":"Phase 1/2","area":"Oncology","n":3062,"pos":72.1},{"phase_clean":"Phase 1/2","area":"Other","n":1919,"pos":84.8},{"phase_clean":"Phase 1/2","area":"Rare Disease","n":158,"pos":78.5},{"phase_clean":"Phase 1/2","area":"Respiratory","n":128,"pos":89.8},{"phase_clean":"Phase 2","area":"CNS","n":3977,"pos":87.4},{"phase_clean":"Phase 2","area":"Cardiovascular","n":1780,"pos":86.2},{"phase_clean":"Phase 2","area":"Immunology","n":2091,"pos":85.0},{"phase_clean":"Phase 2","area":"Infectious Disease","n":3017,"pos":88.0},{"phase_clean":"Phase 2","area":"Metabolic","n":1934,"pos":89.5},{"phase_clean":"Phase 2","area":"Oncology","n":11106,"pos":76.1},{"phase_clean":"Phase 2","area":"Other","n":8082,"pos":85.6},{"phase_clean":"Phase 2","area":"Rare Disease","n":381,"pos":81.1},{"phase_clean":"Phase 2","area":"Respiratory","n":691,"pos":84.1},{"phase_clean":"Phase 2/3","area":"CNS","n":605,"pos":86.8},{"phase_clean":"Phase 2/3","area":"Cardiovascular","n":298,"pos":85.2},{"phase_clean":"Phase 2/3","area":"Immunology","n":152,"pos":84.2},{"phase_clean":"Phase 2/3","area":"Infectious Disease","n":441,"pos":84.4},{"phase_clean":"Phase 2/3","area":"Metabolic","n":290,"pos":92.8},{"phase_clean":"Phase 2/3","area":"Oncology","n":413,"pos":78.7},{"phase_clean":"Phase 2/3","area":"Other","n":1415,"pos":90.2},{"phase_clean":"Phase 2/3","area":"Rare Disease","n":66,"pos":78.8},{"phase_clean":"Phase 2/3","area":"Respiratory","n":75,"pos":81.3},{"phase_clean":"Phase 3","area":"CNS","n":3183,"pos":86.4},{"phase_clean":"Phase 3","area":"Cardiovascular","n":1950,"pos":86.4},{"phase_clean":"Phase 3","area":"Immunology","n":1839,"pos":90.3},{"phase_clean":"Phase 3","area":"Infectious Disease","n":2830,"pos":90.4},{"phase_clean":"Phase 3","area":"Metabolic","n":2222,"pos":91.2},{"phase_clean":"Phase 3","area":"Oncology","n":3193,"pos":82.0},{"phase_clean":"Phase 3","area":"Other","n":7058,"pos":90.5},{"phase_clean":"Phase 3","area":"Rare Disease","n":302,"pos":78.1},{"phase_clean":"Phase 3","area":"Respiratory","n":615,"pos":90.4}],"factor_data":[{"phase":"Phase 2","factor":"modality","level":"Biologic","n":3757,"pos":83.5},{"phase":"Phase 2","factor":"modality","level":"Other","n":3024,"pos":89.6},{"phase":"Phase 2","factor":"modality","level":"Small Molecule","n":26278,"pos":82.2},{"phase":"Phase 2","factor":"is_rct","level":"1","n":21603,"pos":85.4},{"phase":"Phase 2","factor":"is_rct","level":"0","n":11456,"pos":78.4}],"model":{"auc":0.755,"pseudo_r2":0.154,"n_train":99308,"intercept":3.610416129099477,"coefficients":{"phase_clean_Phase 1/2":-0.7541477988687715,"phase_clean_Phase 2":-0.9214836131218853,"phase_clean_Phase 2/3":-1.1793794133920135,"phase_clean_Phase 3":-1.5948345992890782,"area_Cardiovascular":-0.0871803085853526,"area_Immunology":-0.1778289581594851,"area_Infectious Disease":-0.16265027045090016,"area_Metabolic":0.2854475696212758,"area_Oncology":-0.7394974504917077,"area_Other":0.09633473017821906,"area_Rare Disease":-0.03865087912814363,"area_Respiratory":0.05784924762443481,"modality_Other":0.3519560295170335,"modality_Small Molecule":-0.1523462097242135,"is_rct":-0.43959774775473126,"log_enrollment":1.1865668470710675,"log_duration":-0.12343578680466465},"reference_levels":{"phase_clean":"Phase 1","area":"CNS","modality":"Biologic"},"scaler_params":{"log_enrollment":{"mean":4.081069675196241,"std":1.380507011216145},"log_duration":{"mean":3.050828643539221,"std":0.9818750412074092}},"phase_pos":{"Phase 1":{"pos":90.7,"ci_lo":90.4,"ci_hi":91.1},"Phase 1/2":{"pos":81.2,"ci_lo":80.4,"ci_hi":82.1},"Phase 2":{"pos":83.0,"ci_lo":82.6,"ci_hi":83.4},"Phase 2/3":{"pos":86.9,"ci_lo":85.8,"ci_hi":87.9},"Phase 3":{"pos":88.3,"ci_lo":87.9,"ci_hi":88.7}}}};
+
+// ── NAVIGATION ──
+function switchPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[data-page="${id}"]`).classList.add('active');
+  window.scrollTo(0,0);
+  renderChartsIfNeeded(id);
+}
+document.querySelectorAll('.nav-tab').forEach(t=>{
+  t.addEventListener('click',()=>switchPage(t.dataset.page));
+});
+
+// ── TOOLTIP ──
+const tipEl=document.getElementById("tip");
+function showTip(html,x,y){tipEl.innerHTML=html;tipEl.classList.add("show");tipEl.style.left=(x+14)+"px";tipEl.style.top=(y-10)+"px"}
+function hideTip(){tipEl.classList.remove("show")}
+
+// ── STAT STRIP ──
+function renderStatStrip(){
+  const s=DATA.summary;
+  const cells=[
+    {n:(+s.total_trials).toLocaleString(),l:"Trials Analysed",sub:"Phase 1–3, resolved"},
+    {n:s.success_rate+"%",l:"Overall Completion",sub:"Completed / Total"},
+    {n:s.n_areas,l:"Therapeutic Areas",sub:"MeSH-coded"},
+    {n:s.model_auc.toFixed(3),l:"Model AUC",sub:"5-fold cross-validation"},
+    {n:s.date_range,l:"Study Period",sub:"Registration year"},
+  ];
+  document.getElementById("stat-strip").innerHTML=cells.map(c=>`<div class="stat-cell"><div class="stat-cell-n">${c.n}</div><div class="stat-cell-l">${c.l}</div><div class="stat-cell-sub">${c.sub}</div></div>`).join("");
+}
+
+// ── BENCHMARK BARS ──
+let barsRendered=false;
+function renderBars(){
+  if(barsRendered)return; barsRendered=true;
+  const data=DATA.benchmark_bars;
+  const el=document.getElementById("chart-bars");
+  const W=el.clientWidth||640,H=260;
+  const mg={top:16,right:20,bottom:48,left:52};
+  const iw=W-mg.left-mg.right,ih=H-mg.top-mg.bottom;
+  const COLS={"Phase 1":"#0a0a0a","Phase 2":"#003399","Phase 3":"#9a7230","Phase 1/2":"#555","Phase 2/3":"#777"};
+  const svg=d3.select(el).append("svg").attr("width",W).attr("height",H);
+  const g=svg.append("g").attr("transform",`translate(${mg.left},${mg.top})`);
+  const x=d3.scaleBand().domain(data.map(d=>d.phase)).range([0,iw]).padding(0.42);
+  const y=d3.scaleLinear().domain([60,100]).range([ih,0]);
+  g.append("g").call(d3.axisLeft(y).tickSize(-iw).tickFormat(d=>d+"%").ticks(5))
+    .call(ax=>{ax.selectAll("line").style("stroke","#e8e5e0").style("stroke-width","1");ax.select(".domain").remove();ax.selectAll("text").style("fill","#999").style("font-size","11px").style("font-family","Barlow Condensed, sans-serif")});
+  g.selectAll(".bar").data(data).enter().append("rect").attr("class","bar")
+    .attr("x",d=>x(d.phase)).attr("y",d=>y(d.pos_pct))
+    .attr("width",x.bandwidth()).attr("height",d=>ih-y(d.pos_pct))
+    .attr("fill",d=>COLS[d.phase]||"#333")
+    .on("mousemove",(ev,d)=>showTip(`<strong>${d.phase}</strong>${d.pos_pct}%  ·  CI: ${d.ci_lo}–${d.ci_hi}%<br>n = ${(+d.n).toLocaleString()}`,ev.clientX,ev.clientY))
+    .on("mouseleave",hideTip);
+  g.selectAll(".err").data(data).enter().append("line")
+    .attr("x1",d=>x(d.phase)+x.bandwidth()/2).attr("x2",d=>x(d.phase)+x.bandwidth()/2)
+    .attr("y1",d=>y(d.ci_hi)).attr("y2",d=>y(d.ci_lo))
+    .attr("stroke","#aaa").attr("stroke-width",1.5);
+  g.selectAll(".blbl").data(data).enter().append("text")
+    .attr("x",d=>x(d.phase)+x.bandwidth()/2).attr("y",d=>y(d.pos_pct)-8)
+    .attr("text-anchor","middle").attr("fill","#0a0a0a").attr("font-size","13px").attr("font-weight","600").attr("font-family","Barlow Condensed, sans-serif")
+    .text(d=>d.pos_pct+"%");
+  g.selectAll(".nlbl").data(data).enter().append("text")
+    .attr("x",d=>x(d.phase)+x.bandwidth()/2).attr("y",ih+34)
+    .attr("text-anchor","middle").attr("fill","#aaa").attr("font-size","10px").attr("font-family","Barlow Condensed, sans-serif")
+    .text(d=>`n=${(+d.n/1000).toFixed(0)}k`);
+  g.append("g").attr("transform",`translate(0,${ih})`).call(d3.axisBottom(x).tickSize(0))
+    .call(ax=>{ax.select(".domain").style("stroke","#e2dfd9");ax.selectAll("text").style("fill","#333").style("font-size","12px").style("font-family","Barlow Condensed, sans-serif").attr("dy","1.4em")});
+}
+
+// ── HEATMAP ──
+let hmRendered=false;
+function renderHeatmap(){
+  if(hmRendered)return; hmRendered=true;
+  const data=DATA.heatmap;
+  const phases=["Phase 1","Phase 2","Phase 3","Phase 1/2","Phase 2/3"];
+  const areas=["Oncology","CNS","Cardiovascular","Infectious Disease","Metabolic","Immunology","Respiratory","Rare Disease","Other"];
+  const lkp={};
+  data.forEach(r=>{lkp[`${r.phase_clean}|${r.area}`]=r;});
+  const col=d3.scaleSequential().domain([70,96]).interpolator(d3.interpolate("#dce8f7","#003399"));
+  let html=`<thead><tr><th>Area / Phase</th>${phases.map(p=>`<th>${p}</th>`).join("")}</tr></thead><tbody>`;
+  areas.forEach(area=>{
+    html+=`<tr><td>${area}</td>`;
+    phases.forEach(phase=>{
+      const r=lkp[`${phase}|${area}`];
+      if(!r||+r.n<30){html+=`<td class="hm-empty">—</td>`;}
+      else{const v=+r.pos,bg=col(v),fg=v>84?"#fff":"#0a0a0a";html+=`<td style="background:${bg};color:${fg}" title="${phase} · ${area}: ${v}% (n=${(+r.n).toLocaleString()})">${v}%</td>`;}
+    });
+    html+="</tr>";
+  });
+  document.getElementById("heatmap").innerHTML=html+"</tbody>";
+}
+
+// ── HORIZONTAL BARS ──
+let hbarRendered={};
+function renderHbar(id,data,labelKey){
+  if(hbarRendered[id])return; hbarRendered[id]=true;
+  const el=document.getElementById(id);
+  if(!el||!data.length)return;
+  const W=el.clientWidth||600,H=data.length*48+28;
+  const mg={top:8,right:56,bottom:8,left:118};
+  const iw=W-mg.left-mg.right,ih=H-mg.top-mg.bottom;
+  const svg=d3.select(el).append("svg").attr("width",W).attr("height",H);
+  const g=svg.append("g").attr("transform",`translate(${mg.left},${mg.top})`);
+  const y=d3.scaleBand().domain(data.map(d=>d[labelKey])).range([0,ih]).padding(0.28);
+  const x=d3.scaleLinear().domain([0,100]).range([0,iw]);
+  g.selectAll(".bg").data(data).enter().append("rect")
+    .attr("y",d=>y(d[labelKey])).attr("x",0).attr("height",y.bandwidth()).attr("width",iw).attr("fill","#f6f5f3");
+  g.selectAll(".b").data(data).enter().append("rect")
+    .attr("y",d=>y(d[labelKey])).attr("x",0).attr("height",y.bandwidth()).attr("width",d=>x(+d.pos)).attr("fill","#003399")
+    .on("mousemove",(ev,d)=>showTip(`<strong>${d[labelKey]}</strong>${d.pos}%  ·  n=${(+d.n).toLocaleString()}`,ev.clientX,ev.clientY))
+    .on("mouseleave",hideTip);
+  g.selectAll(".lbl").data(data).enter().append("text")
+    .attr("x",d=>x(+d.pos)+6).attr("y",d=>y(d[labelKey])+y.bandwidth()/2+4)
+    .attr("fill","#0a0a0a").attr("font-size","12px").attr("font-weight","600").attr("font-family","Barlow Condensed, sans-serif")
+    .text(d=>d.pos+"%");
+  g.append("g").call(d3.axisLeft(y).tickSize(0))
+    .call(ax=>{ax.select(".domain").remove();ax.selectAll("text").style("fill","#555").style("font-size","12px").style("font-family","Barlow, sans-serif")});
+}
+
+// ── COEFFICIENT TABLE ──
+function renderCoefTable(){
+  const coef=DATA.model.coefficients;
+  const labels={"phase_clean_Phase 1/2":"Phase 1/2 vs Phase 1","phase_clean_Phase 2":"Phase 2 vs Phase 1","phase_clean_Phase 2/3":"Phase 2/3 vs Phase 1","phase_clean_Phase 3":"Phase 3 vs Phase 1","area_Cardiovascular":"Cardiovascular vs CNS","area_Immunology":"Immunology vs CNS","area_Infectious Disease":"Infectious Disease vs CNS","area_Metabolic":"Metabolic vs CNS","area_Oncology":"Oncology vs CNS","area_Other":"Other vs CNS","area_Rare Disease":"Rare Disease vs CNS","area_Respiratory":"Respiratory vs CNS","modality_Other":"Other vs Biologic","modality_Small Molecule":"Small Molecule vs Biologic","is_rct":"Randomised Controlled Trial","log_enrollment":"Log Enrollment (standardised)","log_duration":"Log Duration (standardised)"};
+  const rows=Object.entries(coef).map(([k,v])=>({label:labels[k]||k,coef:v}));
+  rows.sort((a,b)=>b.coef-a.coef);
+  let html=`<tr><th>Feature</th><th>Coefficient</th><th>Direction</th></tr>`;
+  rows.forEach(r=>{
+    const cls=r.coef>0?"pos":"neg";
+    const dir=r.coef>0?"↑ Increases PoS":"↓ Reduces PoS";
+    html+=`<tr><td>${r.label}</td><td class="num ${cls}">${r.coef.toFixed(4)}</td><td style="font-size:11px;color:${r.coef>0?'#006633':'#cc2200'}">${dir}</td></tr>`;
+  });
+  document.getElementById("coef-table").innerHTML=html;
+}
+
+// ── LAZY RENDER ──
+let methRendered=false;
+function renderChartsIfNeeded(id){
+  if(id==="page-bench"){
+    renderStatStrip();renderBars();renderHeatmap();
+    const fd=DATA.factor_data||[];
+    renderHbar("chart-modality",fd.filter(d=>d.phase==="Phase 2"&&d.factor==="modality"),"level");
+    renderHbar("chart-rct",fd.filter(d=>d.phase==="Phase 2"&&d.factor==="is_rct").map(d=>({...d,level:d.level==="1"?"RCT":"Single-Arm"})),"level");
+  }
+  if(id==="page-meth"&&!methRendered){methRendered=true;renderCoefTable();}
+}
+
+// ── CALCULATOR ──
+const PHASE_FEAT={"Phase 1/2":"phase_clean_Phase 1/2","Phase 2":"phase_clean_Phase 2","Phase 2/3":"phase_clean_Phase 2/3","Phase 3":"phase_clean_Phase 3"};
+const AREA_FEAT={"Cardiovascular":"area_Cardiovascular","Infectious Disease":"area_Infectious Disease","Metabolic":"area_Metabolic","Immunology":"area_Immunology","Oncology":"area_Oncology","Other":"area_Other","Rare Disease":"area_Rare Disease","Respiratory":"area_Respiratory"};
+const MODAL_FEAT={"Other":"modality_Other","Small Molecule":"modality_Small Molecule"};
+function sigmoid(x){return 1/(1+Math.exp(-x))}
+
+function calculate(){
+  const phase=document.getElementById("sel-phase").value;
+  const area=document.getElementById("sel-area").value;
+  const modality=document.getElementById("sel-modality").value;
+  const sponsor=+document.getElementById("sel-sponsor").value;
+  const rct=+document.getElementById("sel-rct").value;
+  const enroll=+document.getElementById("enroll-slider").value;
+  const model=DATA.model,coef=model.coefficients||{},sp=model.scaler_params||{};
+  let logit=+(model.intercept||0);
+  const pf=PHASE_FEAT[phase]; if(pf)logit+=(coef[pf]||0);
+  const af=AREA_FEAT[area];   if(af)logit+=(coef[af]||0);
+  const mf=MODAL_FEAT[modality]; if(mf)logit+=(coef[mf]||0);
+  logit+=rct*(coef["is_rct"]||0);
+  logit+=sponsor*(coef["is_industry"]||0);
+  const log_enroll=Math.log1p(enroll);
+  if(sp.log_enrollment){const sc=(log_enroll-sp.log_enrollment.mean)/sp.log_enrollment.std;logit+=sc*(coef["log_enrollment"]||0);}
+  const prob=sigmoid(logit);
+  const pos=Math.round(prob*1000)/10;
+  const margin=1.96*Math.sqrt(prob*(1-prob)/200)*100;
+  const ci_lo=Math.max(1,pos-margin).toFixed(1);
+  const ci_hi=Math.min(99,pos+margin).toFixed(1);
+  const bench=(model.phase_pos||{})[phase]||{pos:83,ci_lo:82,ci_hi:84};
+  const delta=pos-bench.pos;
+  document.getElementById("res-pct").textContent=pos.toFixed(1)+"%";
+  document.getElementById("res-phase-lbl").textContent=`Probability of completion — ${phase}`;
+  document.getElementById("res-ci").textContent=`${ci_lo}% – ${ci_hi}%`;
+  document.getElementById("res-bench").textContent=bench.pos.toFixed(1)+"% (phase avg)";
+  const dEl=document.getElementById("res-delta-badge");
+  dEl.textContent=`${delta>=0?"+":""}${delta.toFixed(1)} pp vs benchmark`;
+  dEl.className="res-score-delta "+(delta>=0?"delta-pos":"delta-neg");
+  dEl.style.display="inline-block";
+  const pctile=Math.round(pos);
+  document.getElementById("res-pctile").textContent=pctile+"th percentile";
+  document.getElementById("pctile-fill").style.width=pctile+"%";
+  document.getElementById("bench-marker").style.left=bench.pos+"%";
+  document.getElementById("bench-label").textContent=bench.pos.toFixed(1)+"%";
+  document.getElementById("result-panel").classList.add("show");
+}
+
+document.getElementById("enroll-slider").addEventListener("input",function(){
+  document.getElementById("enroll-lbl").innerHTML=`${(+this.value).toLocaleString()} <span style="font-size:12px;font-weight:400;color:var(--mid)">patients</span>`;
+});
+
+document.getElementById("dl-json-btn").addEventListener("click",function(e){
+  e.preventDefault();
+  const b=new Blob([JSON.stringify(DATA,null,2)],{type:"application/json"});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement("a");a.href=u;a.download="dashboard_data.json";a.click();URL.revokeObjectURL(u);
+});
+</script>
+</body>
+</html>
