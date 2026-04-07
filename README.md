@@ -76,7 +76,7 @@ python -m http.server 8000
 
 ---
 
-## Manual AACT download (if 00_setup.py fails)
+## Manual AACT download 
 
 1. Go to https://aact.ctti-clinicaltrials.org/downloads
 2. Click the most recent **pipe-delimited monthly archive**
