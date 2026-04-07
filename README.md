@@ -113,8 +113,6 @@ Output: adjusted PoS + 95% confidence interval + percentile vs all trials.
 
 ---
 
----
-
 ## How to use this in an rNPV model
 
 ```
