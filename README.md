@@ -1,4 +1,4 @@
-# Phase Transition Probability (PoS) Calculator
+# Phase Transition Probability Calculator
 ---
 
 ## What this project does
